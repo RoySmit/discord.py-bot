@@ -44,7 +44,7 @@ class Fun(Cog):
 		await ctx.message.delete()
 		await ctx.send(message)
 
-	@command(name="fact", brief="gives you some interesting facts about a cat, dog, panda, fox, bird or koala.")
+	@command(name="fact", brief="Gives you some interesting facts about a cat, dog, panda, fox, bird or koala.")
 	@cooldown(5, 60, BucketType.user)
 	async def animal_fact(self, ctx, animal: str):
 		if (animal:= animal.lower()) in("dog", "cat", "panda", "fox", "bird", "koala"):

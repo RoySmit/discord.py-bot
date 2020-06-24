@@ -9,7 +9,7 @@ class Info(Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	@command(name="userinfo", aliases=["memberinfo", "ui", "mi"])
+	@command(name="userinfo", aliases=["memberinfo", "ui", "mi"], brief="Shows user info")
 	async def user_info(self, ctx, target: Optional[Member]):
 		target = target or ctx.author
 		embed = Embed(title="User Information",
@@ -35,7 +35,7 @@ class Info(Cog):
 
 		await ctx.send(embed=embed)
 
-	@command(name="serverinfo", aliases=["guildinfo", "si", "gi"])
+	@command(name="serverinfo", aliases=["guildinfo", "si", "gi"], brief="Shows server info")
 	async def server_info(self, ctx):
 		embed = Embed(title="Server Information",
 					  colour=ctx.guild.owner.colour,

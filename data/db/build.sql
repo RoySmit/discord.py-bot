@@ -4,3 +4,9 @@ CREATE TABLE IF NOT EXISTS exp (
 	level integer DEFAULT 0,
 	XPLock text DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS mutes (
+	UserID integer PRIMARY KEY,
+	RoleIDs text,
+	EndTime text
+);

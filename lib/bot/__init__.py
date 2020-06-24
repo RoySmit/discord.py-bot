@@ -4,7 +4,7 @@ from glob import glob
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from discord import Embed, File
+from discord import Embed, File, DMChannel
 from discord.errors import HTTPException, Forbidden
 from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import Context
@@ -105,20 +105,24 @@ class Bot(BotBase):
 		elif isinstance(exc, CommandOnCooldown):
 			await ctx.send(f"That command is on {str(exc.cooldown.type).split('.')[-1]} cooldown, please wait {exc.retry_after:,.2f} seconds.")
 
-		# elif isinstance(exc.original, HTTPException):
-		# 	await ctx.send("Unable to send message.")
+		elif hasattr(exc, "original"):
+				# elif isinstance(exc.original, HTTPException):
+				# 	await ctx.send("Unable to send message.")
 
-		elif isinstance(exc.original, Forbidden):
-			await ctx.send("I do not have permission to do that.")
+			if isinstance(exc.original, Forbidden):
+				await ctx.send("I do not have permission to do that.")
 
+			else:
+				raise exc.original
+				
 		else:
-			raise exc.original
+			raise exc
 
 
 	async def on_ready(self):
 		if not self.ready:
 			self.guild = self.get_guild(721160314787201116)
-			self.stdout = self.get_channel(721160314787201119)
+			self.stdout = self.get_channel(723596129161314324)
 			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=12, minute=0, second=0))
 			self.scheduler.start()
 
@@ -147,7 +151,30 @@ class Bot(BotBase):
 
 	async def on_message(self, message):
 		if not message.author.bot:
-			await self.process_commands(message)
+			if isinstance(message.channel, DMChannel):
+				if len(message.content) < 50:
+					await message.channel.send("Your message should be atleast 50 characters long. Give an exact explaination and quote the message")
+
+				else:
+					member = self.guild.get_member(message.author.id)
+					embed = Embed(title="Modmail",
+								  colour=member.colour,
+								  timestamp=datetime.utcnow())
+
+					embed.set_thumbnail(url=member.avatar_url)
+
+					fields = [("Member", member.display_name, False),
+							  ("Message", message.content, False)]
+
+					for name, value, inline in fields:
+						embed.add_field(name=name, value=value, inline=inline)
+
+					mod = self.get_cog("Mod")
+					await mod.log_channel.send(embed=embed)
+					await message.channel.send("Message relayed to moderators.")
+
+			else:
+				await self.process_commands(message)
 
 
 bot = Bot()

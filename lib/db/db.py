@@ -35,11 +35,11 @@ def close():
 	cxn.close()
 
 
-def field(command, *value):
-	cur.execute(command, tuple(values))
+def field(command, *values):
+    cur.execute(command, tuple(values))
 
-	if (fetch := cur.fetchone()) is not None:
-		return fetch[0]
+    if (fetch := cur.fetchone()) is not None:
+        return fetch[0]
 
 
 def record(command, *value):

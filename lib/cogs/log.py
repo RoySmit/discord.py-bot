@@ -82,7 +82,7 @@ class Log(Cog):
 				embed.set_thumbnail(url=after.avatar_url)
 
 			else:
-				embed.add_field(name="Role delete", value=set(before.roles).symmetric_difference(after.roles).pop().mention, inline=False)
+				embed.add_field(name="Role deleted", value=set(before.roles).symmetric_difference(after.roles).pop().mention, inline=False)
 				embed.set_thumbnail(url=after.avatar_url)
 
 			await self.log_channel.send(embed=embed)
@@ -119,7 +119,11 @@ class Log(Cog):
 				embed.add_field(name=name, value=value, inline=inline)
 			embed.set_thumbnail(url=message.author.avatar_url)
 
+			if message.content == "": return
+			
 			await self.log_channel.send(embed=embed)
+
+		
 
 
 
