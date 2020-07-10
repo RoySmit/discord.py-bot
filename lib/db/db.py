@@ -42,19 +42,19 @@ def field(command, *values):
         return fetch[0]
 
 
-def record(command, *value):
+def record(command, *values):
 	cur.execute(command, tuple(values))
 
 	return cur.fetchone()
 
 
-def records(command, *value):
+def records(command, *values):
 	cur.execute(command, tuple(values))
 
 	return cur.fetchall()
 
 
-def column(command, *value):
+def column(command, *values):
 	cur.execute(command, tuple(values))
 
 	return [item[0] for item in cur.fetchall()]
